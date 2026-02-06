@@ -1,2 +1,2 @@
 # chat
-https://github.com/gemsyt10/chat.git
+https://gemsyt10.github.io/chat/
