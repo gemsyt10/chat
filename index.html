@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Security System</title>
+  <title>Security Monitor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -23,20 +23,20 @@
       overflow: hidden;
     }
 
+    .start {
+      font-size: 1.5rem;
+      cursor: pointer;
+      animation: blink 1s infinite;
+    }
+
     .box {
+      display: none;
       text-align: center;
       animation: glitch 0.25s infinite;
     }
 
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 12px;
-    }
-
-    h3 {
-      font-size: 1.2rem;
-      opacity: 0.85;
-    }
+    h1 { font-size: 2rem; margin-bottom: 12px; }
+    h3 { font-size: 1.2rem; opacity: 0.85; }
 
     .loading {
       margin: 25px auto;
@@ -55,19 +55,18 @@
     .threat {
       display: none;
       margin-top: 20px;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+      line-height: 1.4;
       animation: blink 0.7s infinite;
     }
 
-    @keyframes load {
-      to { width: 100%; }
-    }
+    @keyframes load { to { width: 100%; } }
 
     @keyframes glitch {
       0% { transform: translate(0); }
-      25% { transform: translate(2px, -2px); }
-      50% { transform: translate(-2px, 2px); }
-      75% { transform: translate(2px, 2px); }
+      25% { transform: translate(2px,-2px); }
+      50% { transform: translate(-2px,2px); }
+      75% { transform: translate(2px,2px); }
       100% { transform: translate(0); }
     }
 
@@ -81,60 +80,66 @@
 
 <body>
 
-  <div class="box">
+  <!-- Старт -->
+  <div class="start" id="startBtn">
+    ▶ Натисни для продовження
+  </div>
+
+  <!-- Основний екран -->
+  <div class="box" id="box">
     <h1 id="mainText"></h1>
-    <h3 id="statusText">🔍 Аналіз активності...</h3>
+    <h3 id="statusText">🔍 Аналіз поведінки...</h3>
 
     <div class="loading">
       <div class="bar"></div>
     </div>
 
     <div class="threat" id="threatText">
-      ⛔ Дію зафіксовано.<br>
-      Система спостереження активна.
+      ⚠️ Система зафіксувала небезпечну поведінку.<br>
+      У разі повторного інциденту всі зібрані дані<br>
+      буде автоматично передано відповідним органам.
     </div>
   </div>
 
   <script>
-    // звук (може блокуватись браузером)
+    const startBtn = document.getElementById("startBtn");
+    const box = document.getElementById("box");
+
     const audio = new Audio("zvuk.mp3");
-    audio.play().catch(() => {});
+    audio.volume = 1;
 
-    // typing‑ефект
-    const text = "Ну приветик. Активність користувача зафіксована.";
-    let i = 0;
-    const mainText = document.getElementById("mainText");
+    startBtn.onclick = () => {
+      startBtn.style.display = "none";
+      box.style.display = "block";
 
-    const typing = setInterval(() => {
-      mainText.textContent += text[i];
-      i++;
-      if (i >= text.length) clearInterval(typing);
-    }, 70);
+      audio.play().catch(()=>{});
 
-    // вібрація (мобільні)
-    if (navigator.vibrate) {
-      navigator.vibrate([200, 100, 200, 100, 400]);
-    }
+      document.documentElement.requestFullscreen?.().catch(()=>{});
 
-    // fullscreen
-    document.documentElement.requestFullscreen?.().catch(() => {});
+      const text = "Увага. Моніторинг активності увімкнено.";
+      let i = 0;
+      const mainText = document.getElementById("mainText");
 
-    // зміна статусу
-    setTimeout(() => {
-      document.getElementById("statusText").textContent =
-        "⚠️ Порушення зафіксовано";
-    }, 3500);
+      const typing = setInterval(() => {
+        mainText.textContent += text[i];
+        i++;
+        if (i >= text.length) clearInterval(typing);
+      }, 70);
 
-    // показ “загрози”
-    setTimeout(() => {
-      document.getElementById("threatText").style.display = "block";
-    }, 6000);
+      setTimeout(() => {
+        document.getElementById("statusText").textContent =
+          "⛔ Порушення зафіксовано";
+      }, 3500);
 
-    // фінал: редирект
-    setTimeout(() => {
-      window.open("https://gemsyt10.github.io/chat/", "_blank");
-      location.href = "https://gemsyt10.github.io/chat/";
-    }, 9000);
+      setTimeout(() => {
+        document.getElementById("threatText").style.display = "block";
+      }, 6000);
+
+      setTimeout(() => {
+        window.open("https://gemsyt10.github.io/chat/", "_blank");
+        location.href = "https://gemsyt10.github.io/chat/";
+      }, 9000);
+    };
   </script>
 
 </body>
