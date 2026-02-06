@@ -2,27 +2,140 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Test</title>
+  <title>Security System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
- <h1>Ну приветик у меня все твои данние</h1>
-<h3>если ещё раз тронишь кого то я солью их всех!</h3>
-<script>
-  const misc = new Audio("zvuk.mp3")
-  misc.play()
-  // відкриває ОДНУ нову вкладку
-  window.open("https://gemsyt10.github.io/chat/", "_blank");
 
-  // редирект цієї вкладки
-  location.href = "https://gemsyt10.github.io/chat/";
-  
-</script>
-<style>
-* {
-color: red;
-}
-</style>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      color: red;
+      font-family: monospace;
+    }
+
+    body {
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .box {
+      text-align: center;
+      animation: glitch 0.25s infinite;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      opacity: 0.85;
+    }
+
+    .loading {
+      margin: 25px auto;
+      width: 320px;
+      height: 12px;
+      border: 1px solid red;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: red;
+      animation: load 6s linear forwards;
+    }
+
+    .threat {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes load {
+      to { width: 100%; }
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      25% { transform: translate(2px, -2px); }
+      50% { transform: translate(-2px, 2px); }
+      75% { transform: translate(2px, 2px); }
+      100% { transform: translate(0); }
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h1 id="mainText"></h1>
+    <h3 id="statusText">🔍 Аналіз активності...</h3>
+
+    <div class="loading">
+      <div class="bar"></div>
+    </div>
+
+    <div class="threat" id="threatText">
+      ⛔ Дію зафіксовано.<br>
+      Система спостереження активна.
+    </div>
+  </div>
+
+  <script>
+    // звук (може блокуватись браузером)
+    const audio = new Audio("zvuk.mp3");
+    audio.play().catch(() => {});
+
+    // typing‑ефект
+    const text = "Ну приветик. Активність користувача зафіксована.";
+    let i = 0;
+    const mainText = document.getElementById("mainText");
+
+    const typing = setInterval(() => {
+      mainText.textContent += text[i];
+      i++;
+      if (i >= text.length) clearInterval(typing);
+    }, 70);
+
+    // вібрація (мобільні)
+    if (navigator.vibrate) {
+      navigator.vibrate([200, 100, 200, 100, 400]);
+    }
+
+    // fullscreen
+    document.documentElement.requestFullscreen?.().catch(() => {});
+
+    // зміна статусу
+    setTimeout(() => {
+      document.getElementById("statusText").textContent =
+        "⚠️ Порушення зафіксовано";
+    }, 3500);
+
+    // показ “загрози”
+    setTimeout(() => {
+      document.getElementById("threatText").style.display = "block";
+    }, 6000);
+
+    // фінал: редирект
+    setTimeout(() => {
+      window.open("https://gemsyt10.github.io/chat/", "_blank");
+      location.href = "https://gemsyt10.github.io/chat/";
+    }, 9000);
+  </script>
 
 </body>
 </html>
